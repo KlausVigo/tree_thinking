@@ -1,3 +1,5 @@
+library(markdown)
+tabPanelAbout <- source("about.R")$value
 
 # Define UI for application that draws a histogram
 ui <- navbarPage("Tree Thinking",
@@ -80,6 +82,6 @@ ui <- navbarPage("Tree Thinking",
       )
     )
   ),       
-  tabPanel("About")
+  tabPanelAbout()
 )
 
