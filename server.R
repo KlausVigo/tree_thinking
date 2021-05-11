@@ -40,10 +40,10 @@ topology <- function(tree=NULL, ntips=8, nni=1, k=4,
   srt[direction=="upwards"] = -90
   srt[direction=="downwards"] = 90
   srt[type=="fan"] = 0
-#  adj <- rep(NULL, k)
+  adj <- rep(0.5, k)
 #  adj[direction=="downwards" | direction=="upwards"] = 0.5
   # add srt adj arguments for upwards and downwards
-  list(trees=trees, pos=pos, type=type, direction=direction, srt=srt)
+  list(trees=trees, pos=pos, type=type, direction=direction, srt=srt, adj=adj)
 }
 
 
@@ -99,9 +99,9 @@ server <- function(input, output, session) {
   output$trees_q2 <- renderPlot({
     # generate bins based on input$bins from ui.R
     td  <- datasetInput_q2()
-    par(mfrow=c(2,2))
+    par(mfrow=c(2,2), mar=c(2,2,2,2))
     for(i in 1:4){
-      plot(td$trees[[i]], type=td$type[i], direction=td$direction[i], 
+      plot(td$trees[[i]], type=td$type[i], direction=td$direction[i], adj=0.5,
            use.edge.length = FALSE, main=LETTERS[i], srt=td$srt[i], lab4ut="h")
     }
   })
