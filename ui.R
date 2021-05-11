@@ -64,7 +64,22 @@ ui <- navbarPage("Tree Thinking",
              )
            )
   ),           
-  tabPanel("Quiz 4"),
+  tabPanel("Quiz 4",
+    sidebarLayout(
+     sidebarPanel(
+       actionButton("update_q4", "New tree"),
+#       p("Write the tree in paranthetical notation (Newick), e.g. ((A,B),C);"),
+       textInput("newick", h4("Write the tree in paranthetical notation (Newick), e.g. ((A,B),C);"), 
+                 value = ""), 
+       actionButton("check_q4", "Check my choice")
+      ),
+      mainPanel(
+        textOutput("txt_q4"),
+        plotOutput("trees_q4"), 
+        plotOutput("your_trees_q4")
+      )
+    )
+  ),       
   tabPanel("About")
 )
 

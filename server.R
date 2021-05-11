@@ -173,4 +173,52 @@ server <- function(input, output, session) {
   output$txt_q3 <- renderText({
     textResult_q3()
   })
+  
+  
+  # Quiz 4
+  
+#  datasetInput <- eventReactive(input$update, {
+#    switch(input$dataset,
+#           "rock" = rock,
+#           "pressure" = pressure,
+ #          "cars" = cars)
+ # }, ignoreNULL = FALSE)
+  observeEvent(input$update_q4, {
+    updateTextInput(session, "newick", value="")
+  })
+  
+  
+  datasetInput_q4 <- eventReactive(input$update_q4, {
+    ntips <- 6
+    tree <- rtree(ntips, tip.label=LETTERS[1:ntips]) 
+    tree$tip.label <- LETTERS[1:ntips]
+    tree
+  }, ignoreNULL = FALSE)
+  
+  textResult_q4 <- eventReactive(input$check_q4, {
+    td  <- datasetInput_q4() 
+    nwk <- input$newick
+
+    tree <- read.tree(text=nwk)
+    if(!is.null(tree)){
+      if(RF.dist(unroot(td), unroot(tree))==0) praise()
+      else "Not quite yet!"
+    }
+    else "Not quite yet!"
+  }, ignoreNULL = FALSE)
+  
+  output$txt_q4 <- renderText({
+    textResult_q4()
+  })
+  
+  
+  output$trees_q4 <- renderPlot({
+    # generate bins based on input$bins from ui.R
+    td  <- datasetInput_q4()
+    par(mar=c(2,2,2,2))
+    plot(td, type="cladogram", direction="upwards", adj=0.5,
+         label.offset = 0.5, use.edge.length = FALSE, srt=-90, cex=1.5)
+  })
+  
+  
 }
