@@ -21,8 +21,8 @@ ui <- navbarPage("Tree Thinking",
     
       # Show a plot of the generated distribution
       mainPanel(
-        plotOutput("trees_q1"), 
-        textOutput("txt_q1")
+        textOutput("txt_q1"),        
+        plotOutput("trees_q1")
       )
     )
   ), 
@@ -45,7 +45,25 @@ ui <- navbarPage("Tree Thinking",
       )
     )
   ),       
-  tabPanel("Quiz 3"),
+  tabPanel("Quiz 3",
+           sidebarLayout(
+             sidebarPanel(
+               actionButton("update_q3", "New Quiz"),
+               radioButtons("radio_q3", "Which of the four smaller trees is compatible with the larger tree once the extra taxa are pruned?",
+                            c("A" = 1,
+                              "B" = 2,
+                              "C" = 3,
+                              "D" = 4), 
+                            selected=character(0)), 
+               actionButton("check_q3", "Check my choice")
+             ),
+             
+             mainPanel(
+               textOutput("txt_q3"),
+               plotOutput("trees_q3") 
+             )
+           )
+  ),           
   tabPanel("Quiz 4"),
   tabPanel("About")
 )

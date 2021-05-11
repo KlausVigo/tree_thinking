@@ -47,6 +47,30 @@ topology <- function(tree=NULL, ntips=8, nni=1, k=4,
 }
 
 
+pruning <- function(tree=NULL, ntips=c(5,7,6,6), nni=1, max_tips=12){
+  trees <- vector("list", length(ntips))
+  tree <- rtree(max_tips, tip.label = LETTERS[1:max_tips])
+  for(i in seq_along(ntips)){
+    trees[[i]] <- keep.tip(tree, sample(max_tips, ntips[i]))
+  }
+  class(trees) <- "multiPhylo"
+  k <- length(ntips)
+  pos <- sample(k, 1L) 
+  
+  for(i in seq_len(k)){
+    trees[[i]] <- rotate_clades(trees[[i]])
+    if(i!=pos){
+      tmp <- rNNI(trees[[i]])
+      while(RF.dist(tmp, trees[[i]])==0) tmp <- rNNI(trees[[i]])
+      trees[[i]] <- tmp
+    }
+  }
+  class(trees) <- "multiPhylo"
+  list(trees = c(tree, trees), pos=pos)
+}
+
+
+
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
   # Quiz 1
@@ -101,6 +125,11 @@ server <- function(input, output, session) {
     td  <- datasetInput_q2()
     par(mfrow=c(2,2), mar=c(2,2,2,2))
     for(i in 1:4){
+      if(td$type[i]=="fan")
+      plot(td$trees[[i]], type=td$type[i], direction=td$direction[i], adj=0.5,
+           use.edge.length = FALSE, main=LETTERS[i], srt=td$srt[i], lab4ut="h",
+           x.lim=c(-1.1,1.1), y.lim=c(-1.1,1.1))
+      else
       plot(td$trees[[i]], type=td$type[i], direction=td$direction[i], adj=0.5,
            use.edge.length = FALSE, main=LETTERS[i], srt=td$srt[i], lab4ut="h")
     }
@@ -108,5 +137,40 @@ server <- function(input, output, session) {
   
   output$txt_q2 <- renderText({
     textResult_q2()
+  })
+  
+  
+  # Quiz 3
+  observeEvent(input$update_q3, {
+    updateRadioButtons(session, "radio_q3", selected = character(0))
+  })
+  
+  datasetInput_q3 <- eventReactive(input$update_q3, {
+    pruning() 
+  }, ignoreNULL = FALSE)
+  
+  textResult_q3 <- eventReactive(input$check_q3, {
+    td  <- datasetInput_q3() 
+    if(is.null(input$radio_q3) )"Choose a tree!"
+    else if(td$pos == input$radio_q3) praise()
+    else "Try again!"
+  }, ignoreNULL = FALSE)
+  
+  output$trees_q3 <- renderPlot({
+    # generate bins based on input$bins from ui.R
+    td  <- datasetInput_q3()
+    nf <- layout(matrix(c(1,1,2,3,4,5), 3, 2, byrow = TRUE))
+    par(mar=c(2,2,2,2))
+    plot(td$trees[[1]], type="cladogram", direction="upwards", adj=0.5,
+         label.offset = 1.1, use.edge.length = FALSE, srt=-90, cex=1.5)
+    for(i in 1:4){
+      plot(td$trees[[i+1]], type="cladogram", direction="upwards", adj=0.5,
+           use.edge.length = FALSE, main=LETTERS[i], srt=-90,
+           label.offset = 0.25, cex=1.5)
+    }
+  })
+  
+  output$txt_q3 <- renderText({
+    textResult_q3()
   })
 }
