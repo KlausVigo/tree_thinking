@@ -5,7 +5,7 @@ HTML("<h1>Tree Thinking</h1>
     <p>It is possible to run it from within R:</p>
     <p><code>shiny::runGitHub('tree_thinking', 'KlausVigo')</code></p>
     <p>You can launched it also via 
-    <a ref='http://klash.shinyapps.io/tree_thinking/'>http://klash.shinyapps.io/tree_thinking/</a> from your web browser.</p>
+    <a ref='https://klash.shinyapps.io/tree_thinking/'>http://klash.shinyapps.io/tree_thinking/</a> from your web browser.</p>
     <p>The source code for Tree Thinking is on <a href='https://github.com/KlausVigo/tree_thinking/'>GitHub</a>. tree_thinking
     is in early development so I am happy to recieve suggestions or bug reports. 
     <a href='https://github.com/KlausVigo/tree_thinking/issues'>https://github.com/KlausVigo/tree_thinking/issues</a></p>
