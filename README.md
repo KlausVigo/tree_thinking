@@ -6,7 +6,7 @@ You can run `tree_thinking` from inside R. You need to have installed recent ver
 
     shiny::runGitHub('tree_thinking', 'KlausVigo')
 
-You can also launch shinyTreeViewer directly via the [RStudio server](http://klash.shinyapps.io/tree_thinking/).
+You can also launch shinyTreeViewer directly via the [RStudio server](https://klash.shinyapps.io/tree_thinking/).
 
 
 License
