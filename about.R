@@ -6,15 +6,15 @@ HTML("<h1>Tree Thinking</h1>
     <p><code>shiny::runGitHub('tree_thinking', 'KlausVigo')</code></p>
     <p>You can launched it also via 
     <a ref='http://klash.shinyapps.io/tree_thinking/'>http://klash.shinyapps.io/tree_thinking/</a> from your web browser.</p>
-    <p>The source code shinyTreeviewer is on <a href='https://github.com/KlausVigo/tree_thinking/'>GitHub</a>. tree_thinking
+    <p>The source code for Tree Thinking is on <a href='https://github.com/KlausVigo/tree_thinking/'>GitHub</a>. tree_thinking
     is in early development so I am happy to recieve suggestions or bug reports. 
     <a href='https://github.com/KlausVigo/tree_thinking/issues'>https://github.com/KlausVigo/tree_thinking/issues</a></p>
     <p> </p>
     <h2>References</h2>
-    <p>Morrison, D. A. (2013). *Tree Thinking: An Introduction to Phylogenetic Biology.* David A. Baum and Stacey D. Smith.</p>
+    <p>David A. Baum and Stacey D. Smith. (2012) *Tree Thinking: An Introduction to Phylogenetic Biology.* </p>
     <p></p>
     <h2>License</strong> </h2>
-    <p>shinyTreeViewer is licensed under the GPLv3. </p>
+    <p>Tree Thinking is licensed under the GPLv3. </p>
     ")
 )}
 
