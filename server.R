@@ -253,15 +253,24 @@ server <- function(input, output, session) {
   textResult_q5 <- reactive({
     td  <- datasetInput_q5() 
     anc <- td$anc_states
-    ord <- order(td$pos)
+    ord <- td$pos - 4L
     anc <- anc[ord]
-    n1 <- input$node_1 == anc[1]  
-    n2 <- input$node_2 == anc[2]
-    n3 <- input$node_3 == anc[3]
+    
+    n1 <- identical(help_fun(input$node_1), help_fun(anc[1]))  
+    n2 <- identical(help_fun(input$node_2), help_fun(anc[2]))
+    n3 <- identical(help_fun(input$node_3), help_fun(anc[3]))
     psc <- td$pscore == input$pscore
     
+    hint <- "Check "
+    
     if(all(n1, n2, n3, psc)) praise()
-    else "Not quite yet!"
+    else{ 
+      hint <- "Not quite yet!\nCheck "
+      if(!n1) hint <- paste(hint, "node 1,")
+      if(!n2) hint <- paste(hint, "node 2,")
+      if(!n3) hint <- paste(hint, "node 3,")
+      if(!psc) hint <- paste(hint, "parsimony score.")
+    }
   }) |> bindEvent(input$check_q5)
   
   output$txt_q5 <- renderText({

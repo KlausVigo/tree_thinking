@@ -1,14 +1,14 @@
 
-
-fitch_quiz <- function(ntips = 4, levels = c("A", "B"), i=4) {
+fitch_quiz <- function(ntips = 4, levels = c("A", "B"), i=NULL) {
   tree <- rtree(ntips)
   tree$tip.label <- paste0("t", seq_len(Ntip(tree)))
   node <- reorder(tree, "postorder")$edge[,2]
   pos <- node[node>Ntip(tree)]
-  pos <- c(pos, Ntip(tree) + 1L)
+  pos <- c(pos, Ntip(tree) + 1L)  
   nnode <- Nnode(tree)
 
   dat <- allSitePattern(ntips, levels = levels) 
+  if(is.null(i)) i <- sample(attr(dat, "nr"), 1)
   nc <- attr(dat, "nc")
   x <- dat[,i]
   contrast <- attr(x, "contrast")
@@ -27,4 +27,9 @@ fitch_quiz <- function(ntips = 4, levels = c("A", "B"), i=4) {
        node_labels=node_labels)
 }
 
- 
+help_fun <- function(x){
+  x <- gsub('\\s+', '', x)
+  x <- toupper(x)
+  x <- strsplit(x, "")[[1]]
+  sort(x)
+} 
