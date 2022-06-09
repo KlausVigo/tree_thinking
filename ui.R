@@ -81,7 +81,25 @@ ui <- navbarPage("Tree Thinking",
         plotOutput("your_trees_q4")
       )
     )
-  ),       
+  ),
+  tabPanel("Quiz 5",
+    sidebarLayout(
+      sidebarPanel(
+        actionButton("update_q5", "New tree / data"),
+        #       p("Write the tree in paranthetical notation (Newick), e.g. ((A,B),C);"),
+        textInput("node_1", h4("Node 1:"), value = ""),
+        textInput("node_2", h4("Node 2:"), value = ""),
+        textInput("node_3", h4("Node 3:"), value = ""),
+        textInput("pscore", h4("Parsimony score:"), value = ""),
+        actionButton("check_q5", "Check"),
+        ),
+      mainPanel(
+        textOutput("txt_q5"),
+        plotOutput("trees_q5"), 
+      )
+    )
+  ),
+
   tabPanelAbout()
 )
 

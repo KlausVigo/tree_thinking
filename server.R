@@ -1,8 +1,9 @@
 library(shiny)
-
 library(ape)
 library(phangorn)
 library(praise)
+
+source("fitch.R")
 
 rotate_clades <- function(tree, times = tree$Nnode %/% 2, swaps = NULL ){
   if(is.null(swaps)) swaps <- sample( unique(tree$edge[,1]), times) 
@@ -95,7 +96,7 @@ server <- function(input, output, session) {
     par(mfrow=c(2,2))
     for(i in 1:4){
       plot(td$trees[[i]], type=td$type[i], direction=td$direction[i], 
-           use.edge.length = FALSE, main=LETTERS[i])
+           use.edge.length = FALSE, main=LETTERS[i], edge.width=2)
     }
   })
   
@@ -128,10 +129,11 @@ server <- function(input, output, session) {
       if(td$type[i]=="fan")
       plot(td$trees[[i]], type=td$type[i], direction=td$direction[i], adj=0.5,
            use.edge.length = FALSE, main=LETTERS[i], srt=td$srt[i], lab4ut="h",
-           x.lim=c(-1.1,1.1), y.lim=c(-1.1,1.1))
+           x.lim=c(-1.1,1.1), y.lim=c(-1.1,1.1), edge.width=2)
       else
       plot(td$trees[[i]], type=td$type[i], direction=td$direction[i], adj=0.5,
-           use.edge.length = FALSE, main=LETTERS[i], srt=td$srt[i], lab4ut="h")
+           use.edge.length = FALSE, main=LETTERS[i], srt=td$srt[i], lab4ut="h", 
+           edge.width=2)
     }
   })
   
@@ -162,11 +164,12 @@ server <- function(input, output, session) {
     nf <- layout(matrix(c(1,1,2,3,4,5), 3, 2, byrow = TRUE))
     par(mar=c(2,2,2,2))
     plot(td$trees[[1]], type="cladogram", direction="upwards", adj=0.5,
-         label.offset = 1.1, use.edge.length = FALSE, srt=-90, cex=1.5)
+         label.offset = 1.1, use.edge.length = FALSE, srt=-90, cex=1.5, 
+         edge.width=2)
     for(i in 1:4){
       plot(td$trees[[i+1]], type="cladogram", direction="upwards", adj=0.5,
            use.edge.length = FALSE, main=LETTERS[i], srt=-90,
-           label.offset = 0.25, cex=1.5)
+           label.offset = 0.25, cex=1.5, edge.width=2)
     }
   })
   
@@ -217,8 +220,54 @@ server <- function(input, output, session) {
     td  <- datasetInput_q4()
     par(mar=c(2,2,2,2))
     plot(td, type="cladogram", direction="upwards", adj=0.5,
-         label.offset = 0.5, use.edge.length = FALSE, srt=-90, cex=1.5)
+         label.offset = 0.5, use.edge.length = FALSE, srt=-90, cex=1.5, 
+         edge.width=2)
   })
+  
+  
+  ## Quiz 5
+  datasetInput_q5 <- eventReactive(input$update_q5, {
+    fitch_quiz() 
+  }, ignoreNULL = FALSE)
+  
+  observeEvent(input$update_q5, {
+    updateTextInput(session, "node_1", value = character(0))
+    updateTextInput(session, "node_2", value = character(0))
+    updateTextInput(session, "node_3", value = character(0))
+    updateTextInput(session, "pscore", value = character(0))
+#    output$txt_q5 <- renderText({""})
+  })
+  
+  output$trees_q5 <- renderPlot({
+    # generate bins based on input$bins from ui.R
+    td  <- datasetInput_q5()
+    plot(td$tree, use.edge.length = FALSE, show.tip.label = FALSE, 
+         direction = "down", edge.width=2)
+    tiplabels(td$tips, cex=2)
+    n1 <- input$node_1 
+    n2 <- input$node_2
+    n3 <- input$node_3
+    nodelabels(paste(td$node_labels, c(n1, n2, n3)), td$pos, cex=2)
+  })
+  
+  textResult_q5 <- reactive({
+    td  <- datasetInput_q5() 
+    anc <- td$anc_states
+    ord <- order(td$pos)
+    anc <- anc[ord]
+    n1 <- input$node_1 == anc[1]  
+    n2 <- input$node_2 == anc[2]
+    n3 <- input$node_3 == anc[3]
+    psc <- td$pscore == input$pscore
+    
+    if(all(n1, n2, n3, psc)) praise()
+    else "Not quite yet!"
+  }) |> bindEvent(input$check_q5)
+  
+  output$txt_q5 <- renderText({
+    textResult_q5()
+  })
+  
   
   
 }
