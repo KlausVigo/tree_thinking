@@ -202,12 +202,25 @@ server <- function(input, output, session) {
     td  <- datasetInput_q4() 
     nwk <- input$newick
 
-    tree <- read.tree(text=nwk)
-    if(!is.null(tree)){
-      if(RF.dist(unroot(td), unroot(tree))==0) praise()
-      else "Not quite yet!"
+    l_p <- lengths(regmatches(nwk, gregexpr("\\(", nwk)))
+    r_p <- lengths(regmatches(nwk, gregexpr("\\)", nwk)))
+    ## Be nice and check for semicolons and upper cases
+    has_sc <- lengths(regmatches(nwk, gregexpr(";", nwk)))
+    if(has_sc == 0) nwk <- paste0(nwk, ";")
+    nwk <- toupper(nwk)
+    txt=""
+    if( l_p != r_p ){
+      txt <- paste0(l_p, " left, ", r_p, "right paranthesis!")
     }
-    else "Not quite yet!"
+    else {
+      tree <- read.tree(text=nwk)
+      if(!is.null(tree)){
+        if(RF.dist(unroot(td), unroot(tree))==0) txt <- praise()
+        else txt <-"Not quite yet!"
+      }
+      else txt <- "Not quite yet!"
+    }
+    txt
   }, ignoreNULL = FALSE)
   
   output$txt_q4 <- renderText({
