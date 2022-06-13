@@ -283,6 +283,7 @@ server <- function(input, output, session) {
       if(!n2) hint <- paste(hint, "node 2,")
       if(!n3) hint <- paste(hint, "node 3,")
       if(!psc) hint <- paste(hint, "parsimony score.")
+      hint
     }
   }) |> bindEvent(input$check_q5)
   
